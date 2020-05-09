@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaStar } from 'react-icons/fa';
 
 interface BackgroundProps {
   url: string;
@@ -12,9 +12,25 @@ export const Container = styled.div`
   align-items: stretch;
 `;
 
+export const Header = styled.div`
+  display: flex;
+  padding: 0.5em;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+export const Favorite = styled.button`
+  border: none;
+  background: none;
+`;
+
+export const Star = styled(FaStar)`
+  color: yellow;
+  font-size: 32px;
+`;
+
 export const GoBack = styled(FaArrowLeft)`
-  margin: 0.5em;
-  color: #ff600e;
+  color: ${props => props.theme.colors.secundary};
   font-size: 32px;
 `;
 
@@ -35,15 +51,15 @@ export const Content = styled.div`
     height: 100px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #ff600e;
+    background: ${props => props.theme.colors.secundary};
     border: 0px none transparent;
     border-radius: 100px;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: #ff600e;
+    background: ${props => props.theme.colors.secundary};
   }
   &::-webkit-scrollbar-thumb:active {
-    background: #ff600e;
+    background: ${props => props.theme.colors.secundary};
   }
   &::-webkit-scrollbar-track {
     background: transparent;
@@ -80,7 +96,7 @@ export const Subtitle = styled.ul`
 
     & > strong {
       font-weight: 800;
-      color: #ff600e;
+      color: ${props => props.theme.colors.secundary};
     }
   }
 `;

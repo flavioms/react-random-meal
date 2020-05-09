@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { GiHotMeal } from 'react-icons/gi';
+import { GiChickenOven } from 'react-icons/gi';
+import { FaStar } from 'react-icons/fa';
 
 import { Container, Title, Subtitle, Button } from './styles';
 
@@ -10,8 +11,13 @@ const Home: React.FC = () => {
       <Title>Está com fome?</Title>
       <Subtitle>Clique no botão abaixo e descubra uma receita</Subtitle>
       <Button to="/meal">
-        <GiHotMeal />
+        <GiChickenOven />
         Gerar Receita
+      </Button>
+
+      <Button to="/favorite">
+        <FaStar />
+        Favoritos
       </Button>
     </Container>
   );

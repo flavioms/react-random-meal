@@ -45,12 +45,17 @@ export const Button = styled(Link)`
   justify-content: center;
   border: 0;
   background: none;
-  color: #fff;
+  color: ${props => props.theme.colors.textColor};
   margin: 2em;
+  text-decoration: none;
 
   &:hover {
     animation: ${shakeAnimation} 0.8s;
-    color: ${transparentize(0.2, '#fff')};
+    color: ${props => transparentize(0.2, props.theme.colors.textColor)};
+  }
+
+  &:last-child {
+    color: yellow;
   }
 
   & > svg {

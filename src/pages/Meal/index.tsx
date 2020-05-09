@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import VideoPlayer from '../../components/VideoPlayer';
 import {
   Container,
+  Header,
   GoBack,
+  Favorite,
+  Star,
   Content,
   Title,
   Subtitle,
@@ -65,26 +69,76 @@ interface MealProps {
   strYoutube: string;
 }
 
+interface StorageProps {
+  id: string;
+  title: string;
+}
+
 const Meal: React.FC = () => {
+  const { mealId } = useParams();
   const [meal, setMeal] = useState<MealProps>();
-  function handleRandom(): void {
+  const [favorites, setFavorites] = useState<StorageProps[]>(() => {
+    const storage = localStorage.getItem('favorites');
+    if (storage) {
+      return JSON.parse(storage);
+    }
+    return [];
+  });
+
+  const addFavorite = (): void => {
+    if (meal) {
+      const { idMeal, strMeal } = meal;
+      if (!favorites.find(item => item.id === idMeal)) {
+        setFavorites([...favorites, { id: idMeal, title: strMeal }]);
+        toast.success('Recipe successfully added!');
+      } else {
+        setFavorites([{ id: idMeal, title: strMeal }]);
+        toast.error('Recipe has already been added!');
+      }
+    }
+  };
+
+  const handleRandom = useCallback(() => {
     axios
       .get('https://www.themealdb.com/api/json/v1/1/random.php')
       .then(result => {
         setMeal(result.data.meals[0]);
       });
-  }
-  useEffect(() => {
-    handleRandom();
   }, []);
+
+  const handleFind = useCallback((id: string) => {
+    axios
+      .get(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+      .then(result => {
+        setMeal(result.data.meals[0]);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (mealId) {
+      handleFind(mealId);
+    } else {
+      handleRandom();
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
   return (
     <>
       {meal && (
         <Container>
           <Content>
-            <Link to="/">
-              <GoBack />
-            </Link>
+            <Header>
+              <Link to="/">
+                <GoBack />
+              </Link>
+
+              <Favorite onClick={addFavorite}>
+                <Star />
+              </Favorite>
+            </Header>
             <Title>{meal.strMeal}</Title>
             <Subtitle>
               <li>
